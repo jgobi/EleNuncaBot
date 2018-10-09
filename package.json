@@ -1,0 +1,13 @@
+{
+  "name": "EleNuncaBot",
+  "version": "0.0.1",
+  "description": "Bot do Telegram para difundir informações e materiais verídicas sobre o candidado a presidente Jair Bolsonaro",
+  "main": "index.js",
+  "repository": "git@github.com:jgobi/EleNuncaBot",
+  "author": "João Gabriel <joao.bicalho@dcc.ufmg.br>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "telegraf": "^3.24.1"
+  }
+}

@@ -7,6 +7,9 @@
   "author": "João Gabriel <joao.bicalho@dcc.ufmg.br>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "start": "cd src && node index.js"
+  },
   "dependencies": {
     "telegraf": "^3.24.1"
   }

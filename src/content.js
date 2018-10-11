@@ -12,8 +12,8 @@ module.exports = {
     start ({ reply }) {
         return reply('Obrigado por participar, aqui você pode encontrar informações e conteúdos publicitários para campanha', keyboard.main());
     },
-    comocomecar ({replyWithMarkdown}) {
-        return replyWithMarkdown(readFileSync('./answers/comocomecar.md', 'utf8'), )
+    comocomecar ( {replyWithMarkdown} ) {
+        return replyWithMarkdown(readFileSync('./answers/comocomecar.md', 'utf8'));
     },
 
     randomLogoImage ({replyWithPhoto}) {

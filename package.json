@@ -11,6 +11,8 @@
     "start": "cd src && node index.js"
   },
   "dependencies": {
+    "firebase-admin": "^6.0.0",
+    "polka": "^0.5.1",
     "telegraf": "^3.24.1"
   }
 }

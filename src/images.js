@@ -1,16 +1,16 @@
 let images = {};
 
 module.exports = {
-    get (path) {
-        return images[path] || { source: path };
+    get (id) {
+        return images[id];
     },
-    add (path, file_id) {
-        images[path] = file_id;
+    add (id, file_id) {
+        return images[id] = file_id;
     },
-    addFromMessage(path, message) {
-        images[path] = message.photo[message.photo.length-1].file_id;
-    },
-    all () {
-        return images;
+    addFromMessage(id, message) {
+        if (!images[id])
+            return images[id] = message.photo[message.photo.length-1].file_id;
+        else
+            return null;
     }
 }

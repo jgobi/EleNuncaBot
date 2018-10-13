@@ -4,7 +4,7 @@
 
 <head>
     <title>Painel de gerenciamento web do EleNuncaBot</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -112,7 +112,7 @@
             el: '#app',
             data: {
                 guia: 'home',
-                loaded: true,
+                loaded: false,
                 isAdmin: false,
                 conteudo: 'Bem-vindo!'
             },
@@ -151,7 +151,7 @@
                     updateUI();
                 });
             } else {
-                document.location = './login.html';
+                document.location = '/login';
             }
         });
 

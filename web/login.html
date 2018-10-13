@@ -43,7 +43,7 @@
             },
             // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
             signInFlow: 'popup',
-            signInSuccessUrl: './index.html',
+            signInSuccessUrl: '/',
             signInOptions: [
                 // Leave the lines as is for the providers you want to offer your users.
                 firebase.auth.EmailAuthProvider.PROVIDER_ID
@@ -52,7 +52,7 @@
         var auth = firebase.auth();
         auth.onAuthStateChanged(function (user) {
             if (user) {
-                document.location.href = "./index.html";
+                document.location.href = "/";
             } else {
                 var ui = new firebaseui.auth.AuthUI(auth);
                 ui.start('#firebaseui-auth-container', uiConfig);

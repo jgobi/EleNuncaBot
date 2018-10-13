@@ -106,8 +106,5 @@ bot.startPolling();
 console.log('\n> EleNuncaBot online!\n');
 
 
-// Stub server to prevent bot from being shutdowned on Now.sh
-require('http').createServer(function (req, res) {
-    res.write('#EleNao #EleNunca');
-    res.end();
-}).listen(8080);
+// Web panel
+require('./server')(8080);

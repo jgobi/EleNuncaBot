@@ -72,11 +72,11 @@ function answer (tipo, ctx) {
       conteudo.teclado ? getKeyboard(conteudo.teclado) : Promise.resolve()
     ]).then(([acaoEnviada, imagem, teclado]) => {
       let markup = teclado ? Markup.keyboard(teclado.itens).oneTime(!!teclado.oneTime).resize().extra() : undefined;
-      return (conteudo.mensagem ? ctx.replyWithMarkdown(conteudo.mensagem) : Promise.resolve())
+      return (conteudo.mensagem ? ctx.replyWithMarkdown(conteudo.mensagem, markup) : Promise.resolve())
       .then(_ => {
         switch (conteudo.tipo) {
           case 'photo':
-            if (!imagem) return ctx.reply(ERR_UNKNOWN, markup);
+            if (!imagem) return ctx.replyWithMarkdown(ERR_UNKNOWN, markup);
             else return ctx.replyWithChatAction('upload_photo')
               .then(_ => ctx.replyWithPhoto(imagem, markup))
               .then(m => saveImage(conteudo.imagem, m));

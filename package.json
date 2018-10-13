@@ -8,7 +8,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "cd src && node index.js"
+    "start": "cd src && node index.js",
+    "deploy": "now -e BOT_TOKEN=@elenuncabotkey -e firebase1=@firebase1 -e firebase2=@firebase2 -e firebase3=@firebase3"
   },
   "dependencies": {
     "firebase-admin": "^6.0.0",

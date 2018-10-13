@@ -65,22 +65,23 @@ function answer (tipo, ctx) {
     let conteudo = documentoMensagem.docs[0].data();
     
     return Promise.all([
-      conteudo.imagem ? ctx.replyWithChatAction('upload_photo') : Promise.resolve(),
+      ctx.replyWithChatAction('typing'),
       conteudo.imagem ? getImage(conteudo.imagem) : Promise.resolve(),
       conteudo.teclado ? getKeyboard(conteudo.teclado) : Promise.resolve()
     ]).then(([acaoEnviada, imagem, teclado]) => {
       let markup = teclado ? Markup.keyboard(teclado.itens).oneTime(!!teclado.oneTime).resize().extra() : undefined;
-      switch (conteudo.tipo) {
-        case 'markdown':
-          return ctx.replyWithMarkdown(conteudo.mensagem || ERR_UNKNOWN, markup);
-        case 'photo':
-          if (!imagem) return ctx.reply(ERR_UNKNOWN, markup);
-          return ctx.replyWithPhoto(imagem, markup).then(m => saveImage(conteudo.imagem, m));
-        case 'location':
-          return ctx.replyWithLocation(conteudo.latitude, conteudo.longitude, markup);
-        default:
-          return ctx.reply(conteudo.mensagem || ERR_UNKNOWN, markup);
-      }
+      return (conteudo.mensagem ? ctx.replyWithMarkdown(conteudo.mensagem) : Promise.resolve())
+      .then(_ => {
+        switch (conteudo.tipo) {
+          case 'photo':
+            if (!imagem) return ctx.reply(ERR_UNKNOWN, markup);
+            else return ctx.replyWithChatAction('upload_photo')
+              .then(_ => ctx.replyWithPhoto(imagem, markup))
+              .then(m => saveImage(conteudo.imagem, m));
+          case 'location':
+            return ctx.replyWithLocation(conteudo.latitude, conteudo.longitude, markup);
+        }
+      })
     }).catch(_ => {
       return ctx.reply(ERR_UNKNOWN);
     });

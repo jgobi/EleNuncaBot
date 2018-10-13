@@ -1,6 +1,6 @@
 {
   "name": "elenuncabot",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Bot do Telegram para difundir informações e materiais verídicas sobre o candidado a presidente Jair Bolsonaro",
   "main": "src/index.js",
   "repository": "git@github.com:jgobi/EleNuncaBot",

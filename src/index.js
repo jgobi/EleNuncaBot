@@ -27,7 +27,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.use(Telegraf.log())
 
 const ERR_NOT_FOUND = "Infelizmente não tenho resposta para isso, mas boa campanha!";
-const ERR_NO_MESSAGE = "Estou tendo problemas para te responder, tente outra coisa por favor.";
+const ERR_UNKNOWN = "Estou tendo problemas para te responder, tente outra coisa por favor.";
 
 function getFirebaseURL (name) {
   return `https://firebasestorage.googleapis.com/v0/b/elenuncabot.appspot.com/o/${name}?alt=media`;
@@ -37,8 +37,10 @@ async function getImage (reference) {
   let image = images.get(reference.id);
   if (image) return image;
   let doc = await reference.get();
-  let file_id = doc.data().file_id;
-  return file_id ? images.add(reference.id, doc.data().file_id) : getFirebaseURL(doc.data().nome);
+  let docData = doc.data();
+  if (!docData) return null;
+  let file_id = docData.file_id;
+  return file_id ? images.add(reference.id, docData.file_id) : getFirebaseURL(docData.nome);
 }
 
 async function getKeyboard (reference) {
@@ -63,21 +65,24 @@ function answer (tipo, ctx) {
     let conteudo = documentoMensagem.docs[0].data();
     
     return Promise.all([
+      conteudo.imagem ? ctx.replyWithChatAction('upload_photo') : Promise.resolve(),
       conteudo.imagem ? getImage(conteudo.imagem) : Promise.resolve(),
       conteudo.teclado ? getKeyboard(conteudo.teclado) : Promise.resolve()
-    ]).then(([imagem, teclado]) => {
+    ]).then(([acaoEnviada, imagem, teclado]) => {
       let markup = teclado ? Markup.keyboard(teclado.itens).oneTime(!!teclado.oneTime).resize().extra() : undefined;
       switch (conteudo.tipo) {
         case 'markdown':
-          return ctx.replyWithMarkdown(conteudo.mensagem || ERR_NO_MESSAGE, markup);
+          return ctx.replyWithMarkdown(conteudo.mensagem || ERR_UNKNOWN, markup);
         case 'photo':
-          if (!imagem) return ctx.reply(ERR_NO_MESSAGE, markup);
+          if (!imagem) return ctx.reply(ERR_UNKNOWN, markup);
           return ctx.replyWithPhoto(imagem, markup).then(m => saveImage(conteudo.imagem, m));
         case 'location':
           return ctx.replyWithLocation(conteudo.latitude, conteudo.longitude, markup);
         default:
-          return ctx.reply(conteudo.mensagem || ERR_NO_MESSAGE, markup);
+          return ctx.reply(conteudo.mensagem || ERR_UNKNOWN, markup);
       }
+    }).catch(_ => {
+      return ctx.reply(ERR_UNKNOWN);
     });
   });
 }

@@ -1,6 +1,8 @@
 let admin = require('firebase-admin');
 
-let serviceAccount = require('../firebase-key.json');
+let serviceAccount = process.env.AMBIENTE === 'prod'
+    ? JSON.parse(process.env.firebase1 + process.env.firebase2 + process.env.firebase3)
+    : require('../firebase-key.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -24,13 +26,13 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 /* Disable logs on production to prevent exposing
  * user's messages on Now.sh public log
  */
-bot.use(Telegraf.log())
+// bot.use(Telegraf.log())
 
 const ERR_NOT_FOUND = "Infelizmente não tenho resposta para isso, mas boa campanha!";
 const ERR_UNKNOWN = "Estou tendo problemas para te responder, tente outra coisa por favor.";
 
 function getFirebaseURL (name) {
-  return `https://firebasestorage.googleapis.com/v0/b/elenuncabot.appspot.com/o/${name}?alt=media`;
+  return encodeURI(`https://firebasestorage.googleapis.com/v0/b/elenuncabot.appspot.com/o/${name}?alt=media`);
 }
 
 async function getImage (reference) {
@@ -107,4 +109,4 @@ console.log('\n> EleNuncaBot online!\n');
 
 
 // Web panel
-require('./server')(8080);
+require('./server')(process.env.AMBIENTE === 'prod' ? 80 : 8080);

@@ -147,7 +147,7 @@
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 verifyAdmin().then(function (ans) {
-                    if (ans.data.status === 'ok') app.isAdmin = true;
+                    if (ans.data.status === 'ok') app.isAdmin = ans.data.isAdmin;
                     updateUI();
                 });
             } else {

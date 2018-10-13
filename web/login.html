@@ -49,9 +49,15 @@
                 firebase.auth.EmailAuthProvider.PROVIDER_ID
             ]
         };
-
-        var ui = new firebaseui.auth.AuthUI(firebase.auth());
-        ui.start('#firebaseui-auth-container', uiConfig);
+        var auth = firebase.auth();
+        auth.onAuthStateChanged(function (user) {
+            if (user) {
+                document.location.href = "./index.html";
+            } else {
+                var ui = new firebaseui.auth.AuthUI(auth);
+                ui.start('#firebaseui-auth-container', uiConfig);
+            }
+        });
     </script>
 </body>
 
